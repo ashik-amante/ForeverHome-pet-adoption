@@ -43,7 +43,7 @@ const Navbar = () => {
                         {/* home */}
                         <NavigationMenuItem>
                             <NavigationMenuLink>
-                                <Link to='/pet-listingt'>Pet Listing</Link>
+                                <Link to="/pet-listing">Pet Listing</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         {/* home */}
