@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart, Facebook, Twitter, Instagram, Github, Mail, MapPin, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom'; 
 
 const Footer = () => {
   return (
@@ -16,7 +17,7 @@ const Footer = () => {
               <span className="text-2xl font-bold tracking-tight">PetAdopt</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              We are passionate about leveraging technology to make a positive impact on the lives of animals. Our mission is to unite pets with their forever families[cite: 7].
+              We are passionate about leveraging technology to make a positive impact on the lives of animals. Our mission is to unite pets with their forever families.
             </p>
             <div className="flex space-x-4 pt-2">
               <Facebook className="h-5 w-5 text-muted-foreground hover:text-primary cursor-pointer transition-colors" />
@@ -30,10 +31,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-4 text-muted-foreground">
-              <li><a href="/" className="hover:text-primary transition-colors">Home</a> </li>
-              <li><a href="/pet-listing" className="hover:text-primary transition-colors">Pet Listing</a> </li>
-              <li><a href="/donations" className="hover:text-primary transition-colors">Donation Campaigns</a> </li>
-              <li><a href="/about" className="hover:text-primary transition-colors">About Us</a> [cite: 20]</li>
+              <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link to="/pet-listing" className="hover:text-primary transition-colors">Pet Listing</Link></li>
+              <li><Link to="/donations" className="hover:text-primary transition-colors">Donation Campaigns</Link></li>
+              <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
             </ul>
           </div>
 
@@ -41,10 +42,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-6">Categories</h3>
             <ul className="space-y-4 text-muted-foreground">
-              <li><a href="/category/cats" className="hover:text-primary transition-colors">Cats</a> [cite: 17]</li>
-              <li><a href="/category/dogs" className="hover:text-primary transition-colors">Dogs</a> [cite: 17]</li>
-              <li><a href="/category/rabbits" className="hover:text-primary transition-colors">Rabbits</a> [cite: 17]</li>
-              <li><a href="/category/fish" className="hover:text-primary transition-colors">Fish</a> [cite: 17]</li>
+              <li><Link to="/category/cats" className="hover:text-primary transition-colors">Cats</Link></li>
+              <li><Link to="/category/dogs" className="hover:text-primary transition-colors">Dogs</Link></li>
+              <li><Link to="/category/rabbits" className="hover:text-primary transition-colors">Rabbits</Link></li>
+              <li><Link to="/category/fish" className="hover:text-primary transition-colors">Fish</Link></li>
             </ul>
           </div>
 
@@ -70,10 +71,10 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 PetAdopt Platform. All rights reserved[cite: 1].</p>
+          <p>© 2025 PetAdopt Platform. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="#" className="hover:underline">Terms of Service</a>
+            <Link to="#" className="hover:underline">Privacy Policy</Link>
+            <Link to="#" className="hover:underline">Terms of Service</Link>
           </div>
         </div>
       </div>

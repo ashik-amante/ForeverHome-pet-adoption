@@ -1,10 +1,12 @@
 import React from "react"
 
 import { ArrowRight, Calendar, MapPin } from "lucide-react"
+import { Link } from "react-router-dom"
 
 
 const PetCard = ({pet}) => {
-    const {name,image,location,age} = pet
+    const {name,image,location,age,_id} = pet
+    console.log(pet);
   return (
     <div className="group bg-background border border-border rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300">
       {/* Image */}
@@ -35,10 +37,12 @@ const PetCard = ({pet}) => {
         </div>
 
          <button 
-                className="w-full py-3 bg-secondary text-secondary-foreground font-semibold rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-secondary text-secondary-foreground font-semibold rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors flex items-center justify-center gap-2 cursor-pointer"
                
               >
-                View Details
+                <Link to={`/pet-details/${pet._id}`}>
+                  View Details
+                </Link>
                 <ArrowRight size={18} />
               </button>
       </div>
