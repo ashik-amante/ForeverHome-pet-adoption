@@ -2,13 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
-    NavigationMenuTrigger,
-    NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,14 +12,19 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Switch } from "@/components/ui/switch"
+import useAuth from '@/hooks/useAuth'
 
 const Navbar = () => {
-    const isLoggedIn = true
+    const {user,logOut} = useAuth()
+    console.log(user);
+    const handleLogout =async () =>{
+        await logOut()
+        alert("Logout successful!");
+    }
+   
     return (
         <div className='shadow-md px-4 py-4'>
             <nav className='max-w-7xl mx-auto flex items-center justify-between'>
@@ -57,8 +58,10 @@ const Navbar = () => {
 
                 {/* collor switch and login logout */}
                 <div className="flex items-center gap-4">
-                    {!isLoggedIn ? (
-                        <Button variant="outline">Login</Button>
+                    {!user ? (
+                        <Button variant="outline">
+                            <Link to='login'>Login</Link>
+                        </Button>
                     ) : (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -72,7 +75,9 @@ const Navbar = () => {
                                 <DropdownMenuItem asChild>
                                     <Link to="/dashboard">Dashboard</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600">
+                                <DropdownMenuItem 
+                                onClick={handleLogout}
+                                className="text-red-600">
                                     Logout
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

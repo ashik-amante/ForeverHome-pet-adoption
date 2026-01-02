@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MapPin, Calendar, Heart, Phone, Home, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";

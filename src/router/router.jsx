@@ -4,6 +4,10 @@ import Home from "../pages/home/Home";
 import PetListing from "@/pages/petListing/PetListing";
 import PetDetails from "@/pages/petDetails/PetDetails";
 import DonationCampaigns from "@/pages/donetion/DonetionCampaigns";
+import DonationDetails from "@/pages/donetionDetail/DonationDetails";
+import AuthenticationLayout from "@/layoute/AuthenticationLayout";
+import Register from "@/pages/authentication/register/Register";
+import Login from "@/pages/authentication/login/Login";
 
 const router = createBrowserRouter([
   {
@@ -26,9 +30,28 @@ const router = createBrowserRouter([
         {
           path: '/donation',
           element: <DonationCampaigns/>
+        },
+        {
+          path: '/donation-details/:id',
+          element: <DonationDetails/>,
+          loader: ({params}) => fetch(`donations.json/${params.id}`)
         }
     ]
   },
+  {
+    path: '/',
+    element: <AuthenticationLayout/>,
+    children: [
+      {
+        path: '/login',
+        element: <Login/>
+      },
+      {
+        path: '/register',
+        element: <Register/>
+      }
+    ]
+  }
 ]);
 
 export default router;
