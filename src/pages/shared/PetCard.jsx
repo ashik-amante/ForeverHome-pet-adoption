@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 
 const PetCard = ({pet}) => {
-    const {name,image,location,age,_id} = pet
+    const {name,image,location,age,_id,category} = pet
     console.log(pet);
   return (
     <div className="group bg-background border border-border rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300">
@@ -17,7 +17,7 @@ const PetCard = ({pet}) => {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute top-3 right-3">
-            <p className="px-6 rounded-full shadow-2xl bg-white text-yellow-700">Pet</p>
+            <p className="px-6 rounded-full shadow-2xl bg-white text-primary font-semibold capitalize">{category}</p>
         </div>
       </div>
 

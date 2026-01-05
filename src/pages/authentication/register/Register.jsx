@@ -1,31 +1,67 @@
-import React from 'react';
+
 import { useForm } from 'react-hook-form';
-import { User, Mail, Lock, Image as ImageIcon, Github, Chrome, ArrowRight } from "lucide-react";
+import { User, Mail, Lock, Image as ImageIcon, Github, Chrome, ArrowRight, Loader } from "lucide-react";
 import { Link } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
+import useAxiosPublic from '@/hooks/useAxiosPublic';
+
+import { useState } from 'react';
 
 
 const Register = () => {
-  const {createUser} = useAuth()
+  const { createUser, updateUserData } = useAuth()
+  const axiosPublic = useAxiosPublic()
+  const [loading, setLoading] = useState(false)
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit =async (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    setLoading(true)
+    const image = data.image[0]
+    if (!data.image || data.image.length === 0) {
+      return alert("Please select an image")
+    }
+    const formData = new FormData()
+    formData.append('image', image)
+
+    const res = await axiosPublic.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_KEY}`, formData)
+    console.log(res.data.data.url);
+
     try {
-      const result = await createUser(data.email,data.password)
+      const result = await createUser(data.email, data.password)
       console.log(result.user);
       alert("Registration successful!");
 
+      // update user profile
+      const updateResult = await updateUserData(
+        data.fullName,
+        res.data.data.url
+      )
+      console.log(updateResult);
+
+      // save data to database  
+      const userData = {
+        name: data.fullName,
+        email: data.email,
+        image: res.data.data.url,
+        role: "user",
+        createdAt: new Date()
+      }
+      const saveUser = await axiosPublic.post('/users', userData)
+      console.log('save user info', saveUser);
+      setLoading(false)
+
     } catch (error) {
       console.log(error.message);
+      setLoading(false)
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/30 p-4 py-12">
       <div className="w-full max-w-xl bg-background border border-border rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row">
-        
+
         {/* Registration Form Side */}
         <div className="w-full p-8 md:p-12">
           <div className="space-y-2 mb-8 text-center md:text-left">
@@ -39,7 +75,7 @@ const Register = () => {
               <label className="text-sm font-semibold flex items-center gap-2">
                 <User size={16} className="text-primary" /> Full Name
               </label>
-              <input 
+              <input
                 {...register("fullName", { required: "Name is required" })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-secondary/20 focus:ring-2 focus:ring-primary outline-none transition-all"
                 placeholder="Your name"
@@ -52,7 +88,7 @@ const Register = () => {
               <label className="text-sm font-semibold flex items-center gap-2">
                 <Mail size={16} className="text-primary" /> Email
               </label>
-              <input 
+              <input
                 type="email"
                 {...register("email", { required: "Email is required" })}
                 className="w-full px-4 py-3 rounded-xl border border-border bg-secondary/20 focus:ring-2 focus:ring-primary outline-none transition-all"
@@ -66,9 +102,9 @@ const Register = () => {
               <label className="text-sm font-semibold flex items-center gap-2">
                 <Lock size={16} className="text-primary" /> Password
               </label>
-              <input 
+              <input
                 type="password"
-                {...register("password", { 
+                {...register("password", {
                   required: "Password is required",
                   minLength: { value: 6, message: "Minimum 6 characters" }
                 })}
@@ -84,7 +120,7 @@ const Register = () => {
                 <ImageIcon size={16} className="text-primary" /> Profile Picture
               </label>
               <div className="relative group">
-                <input 
+                <input
                   type="file"
                   accept="image/*"
                   {...register("image", { required: "Image is required" })}
@@ -94,11 +130,13 @@ const Register = () => {
               {errors.image && <p className="text-xs text-red-500">{errors.image.message}</p>}
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-primary/20"
             >
-              Register Now <ArrowRight size={18} />
+              {
+                loading ? <Loader size={16} className='animate-spin' /> : <span className='flex items-center justify-center gap-1'>Register Now <ArrowRight size={18} /></span>
+              }
             </button>
           </form>
 

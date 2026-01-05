@@ -66,7 +66,7 @@ const Navbar = () => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Avatar className="cursor-pointer">
-                                    <AvatarImage src="https://i.pravatar.cc/150?img=3" />
+                                    <AvatarImage src={user.photoURL} />
                                     <AvatarFallback>U</AvatarFallback>
                                 </Avatar>
                             </DropdownMenuTrigger>

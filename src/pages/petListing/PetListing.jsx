@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Search, MapPin, Calendar, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PetCard from '../shared/PetCard';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
 
 const PetListing = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
-  const [pets, setPets] = useState([]);
-  useEffect(()=>{
-    fetch('/pets.json')
-    .then(res => res.json())
-    .then(data => setPets(data))
-  },[])
+  const axiosSecure = useAxiosSecure()
+
+  const {data: pets =[]} = useQuery({
+    queryKey: ['pets'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/pets')
+      return res.data
+    }
+  })
 
   console.log(pets);
 

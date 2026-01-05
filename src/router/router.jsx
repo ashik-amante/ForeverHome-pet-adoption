@@ -8,6 +8,16 @@ import DonationDetails from "@/pages/donetionDetail/DonationDetails";
 import AuthenticationLayout from "@/layoute/AuthenticationLayout";
 import Register from "@/pages/authentication/register/Register";
 import Login from "@/pages/authentication/login/Login";
+import DashboardLayout from "@/layoute/DashBoardLayouts";
+import AddAPet from "@/pages/Dashboard/AddAPet";
+import MyAdded from "@/pages/Dashboard/MyAdded";
+import AdoptionRequest from "@/pages/Dashboard/AdoptionRequest";
+import CreateDonation from "@/pages/Dashboard/CreateDonation";
+import MyCampaign from "@/pages/Dashboard/MyCampaign";
+import MyDonation from "@/pages/Dashboard/MyDonation";
+import UpdatePet from "@/pages/Dashboard/UpdatePet";
+
+
 
 const router = createBrowserRouter([
   {
@@ -49,6 +59,41 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register/>
+      }
+    ]
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardLayout/>,
+    children: [
+      {
+        path: 'add-pet',
+        element: <AddAPet/>
+      },
+      {
+        path: 'my-pets',
+        element: <MyAdded/>
+      },
+   
+      {
+        path: 'adoption-requests',
+        element: <AdoptionRequest/>
+      },
+      {
+        path: 'create-donation',
+        element: <CreateDonation/>
+      },
+      {
+        path: 'my-campaigns',
+        element: <MyCampaign/>
+      },
+      {
+        path: 'my-donations',
+        element: <MyDonation/>
+      },
+      {
+        path: 'update-pet/:id',
+        element: <UpdatePet/>
       }
     ]
   }
