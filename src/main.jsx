@@ -8,6 +8,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import AuthProvider from './context/AuthProvider'
+import { Toaster } from 'sonner'
 
 
 const queryClient = new QueryClient()
@@ -18,7 +19,7 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
-
+      <Toaster/>
     </QueryClientProvider>
 
   </StrictMode>,

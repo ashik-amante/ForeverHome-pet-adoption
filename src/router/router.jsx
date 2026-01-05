@@ -16,6 +16,7 @@ import CreateDonation from "@/pages/Dashboard/CreateDonation";
 import MyCampaign from "@/pages/Dashboard/MyCampaign";
 import MyDonation from "@/pages/Dashboard/MyDonation";
 import UpdatePet from "@/pages/Dashboard/UpdatePet";
+import axios from "axios";
 
 
 
@@ -42,9 +43,12 @@ const router = createBrowserRouter([
           element: <DonationCampaigns/>
         },
         {
-          path: '/donation-details/:id',
+          path: '/donationDetails/:id',
           element: <DonationDetails/>,
-          loader: ({params}) => fetch(`donations.json/${params.id}`)
+          loader: async ({params}) => {
+            const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
+            return res.data
+          }
         }
     ]
   },

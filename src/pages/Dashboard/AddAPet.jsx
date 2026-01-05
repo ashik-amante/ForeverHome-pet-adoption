@@ -129,7 +129,7 @@ const AddPet = () => {
           {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
         </div>
 
-        {/* Pet Location [cite: 83] */}
+        {/* Pet Location  */}
         <div className="space-y-2">
           <label className="text-sm font-semibold flex items-center gap-2 italic">
             <MapPin size={16} className="text-primary" /> Pet Location
@@ -142,7 +142,7 @@ const AddPet = () => {
           {errors.petLocation && <p className="text-xs text-red-500 mt-1">{errors.petLocation.message}</p>}
         </div>
 
-        {/* Short Description [cite: 84] */}
+        {/* Short Description  */}
         <div className="md:col-span-2 space-y-2">
           <label className="text-sm font-semibold flex items-center gap-2 italic">
             <FileText size={16} className="text-primary" /> Short Description
@@ -155,7 +155,7 @@ const AddPet = () => {
           {errors.shortDescription && <p className="text-xs text-red-500 mt-1">{errors.shortDescription.message}</p>}
         </div>
 
-        {/* Long Description (Textarea) [cite: 85] */}
+        {/* Long Description (Textarea) */}
         <div className="md:col-span-2 space-y-2">
           <label className="text-sm font-semibold flex items-center gap-2 italic">
             <FileText size={16} className="text-primary" /> Long Description
@@ -169,7 +169,7 @@ const AddPet = () => {
           {errors.longDescription && <p className="text-xs text-red-500 mt-1">{errors.longDescription.message}</p>}
         </div>
 
-        {/* Submit Button [cite: 86] */}
+        {/* Submit Button  */}
         <div className="md:col-span-2 pt-4">
           <button
             type="submit"

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useParams } from 'react-router-dom';
+import { useLoaderData, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Elements } from '@stripe/react-stripe-js';
 // import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
@@ -12,17 +12,19 @@ const DonationDetails = () => {
 //   const elements = useElements();
   const [amount, setAmount] = useState("");
   const { id } = useParams();
+  const details = useLoaderData()
+  const  isLoading = false
 
   console.log(id);
 
-  const {data:details={},isLoading} = useQuery({
-    queryKey: ['details'],
-    queryFn: async () => {
-        const res = await fetch('/donations.json')
-        const data = await res.json()
-        return data.find(donation => donation.id.toString() === id.toString())
-    }
-  })
+  // const {data:details={},isLoading} = useQuery({
+  //   queryKey: ['details'],
+  //   queryFn: async () => {
+  //       const res = await fetch('/donations.json')
+  //       const data = await res.json()
+  //       return data.find(donation => donation.id.toString() === id.toString())
+  //   }
+  // })
   console.log(details);
 //   const handleDonate = async (e) => {
 //     e.preventDefault();
