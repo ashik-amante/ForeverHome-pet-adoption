@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, DollarSign } from "lucide-react";
+import { ArrowRight, DollarSign, Pause } from "lucide-react";
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
@@ -15,7 +15,7 @@ const DonationCampaigns = () => {
     }
   })
   console.log(donations);
- 
+
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -43,12 +43,23 @@ const DonationCampaigns = () => {
                 ></div>
               </div>
 
-              <button
-                className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-bold flex items-center justify-center gap-2"
-               
-              >
-                <Link to={`/donationDetails/${camp._id}`}>View Details</Link> <ArrowRight size={18} />
-              </button>
+              {
+                camp.isPaused === true ? (
+                  <button
+                    className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-bold flex items-center justify-center gap-2 disabled:bg-slate-300"
+                    disabled={camp.isPaused === true}
+                  >
+                    <span className='flex items-center gap-2'>
+                      Paused <Pause size={16} />
+                    </span>
+                  </button>
+                ) : (
+                  <Link className='w-full py-3 bg-primary text-primary-foreground rounded-xl font-bold flex items-center justify-center gap-2' to={`/donationDetails/${camp._id}`}>
+                    <span className='flex items-center gap-2'>View Details <ArrowRight size={18} /></span>
+                  </Link>
+                )
+              }
+
             </div>
           </div>
         ))}

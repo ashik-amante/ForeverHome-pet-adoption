@@ -18,11 +18,9 @@ import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
   { title: "Add a Pet", url: "/dashboard/add-pet", icon: PlusCircle },
-
   { title: "My Added Pets", url: "/dashboard/my-pets", icon: PawPrint },
-
   { title: "Adoption Request", url: "/dashboard/adoption-requests", icon: ClipboardList },
-  { title: "Create Donation", url: "/dashboard/create-donation", icon: HandCoins },
+  { title: "Create Donation Campaign", url: "/dashboard/create-donation", icon: HandCoins },
   { title: "My Campaigns", url: "/dashboard/my-campaigns", icon: LayoutDashboard },
   { title: "My Donations", url: "/dashboard/my-donations", icon: History },
 ];

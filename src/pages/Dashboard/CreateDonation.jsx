@@ -43,7 +43,9 @@ const CreateDonation = () => {
         category: data.category.value,
         image: url,
         createdAt: new Date(),
-        email: user?.email
+        email: user?.email,
+        donors: [],
+        isPaused: false
       }
       console.log(campaignData);
       console.log(campaignData);
@@ -152,7 +154,7 @@ const CreateDonation = () => {
         {/* Short Description [cite: 84] */}
         <div className="md:col-span-2 space-y-2">
           <label className="text-sm font-semibold flex items-center gap-2 italic">
-            <FileText size={16} className="text-primary" /> Short Description
+            <FileText size={16} className="text-primary" /> Short Description(Why this campaign)
           </label>
           <input
             {...register("shortDescription", { required: "Short description is required" })}
