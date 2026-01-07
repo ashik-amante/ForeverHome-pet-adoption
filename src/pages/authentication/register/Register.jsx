@@ -1,17 +1,19 @@
 
 import { useForm } from 'react-hook-form';
 import { User, Mail, Lock, Image as ImageIcon, Github, Chrome, ArrowRight, Loader } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 
 const Register = () => {
   const { createUser, updateUserData } = useAuth()
   const axiosPublic = useAxiosPublic()
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -50,6 +52,8 @@ const Register = () => {
       }
       const saveUser = await axiosPublic.post('/users', userData)
       console.log('save user info', saveUser);
+      toast.success('Registration successful!')
+      navigate('/')
       setLoading(false)
 
     } catch (error) {

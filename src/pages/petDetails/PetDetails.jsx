@@ -1,51 +1,40 @@
 import React, {  useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MapPin, Calendar, Heart, Phone, Home, Mail, User } from "lucide-react";
+import { MapPin, Calendar, Heart, Phone, Home, Mail, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useLoaderData } from 'react-router-dom';
+import useAuth from '@/hooks/useAuth';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { toast } from 'sonner';
+
 
 const PetDetails = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { id } = useParams()
+    const {user} = useAuth()
+    const pet = useLoaderData()
+    const axiosSecure = useAxiosSecure()
+    const [loading, setLoading] = useState(false)
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const { data: pet } = useQuery({
-        queryKey: ['pet', id],
-        queryFn: async () => {
-            const res = await fetch('/pets.json')
-            const data = await res.json()
-            return data.find(pet => pet._id === id)
-        }
-    })
-    console.log(pet);
-
-
-    // ডামি ইউজার ডেটা (Firebase/Auth থেকে আসবে)
-    const currentUser = {
-        name: "John Doe",
-        email: "john@example.com"
-    };
-
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            userName: currentUser.name,
-            email: currentUser.email
-        }
-    });
-
-    const onSubmit = (data) => {
+    const onSubmit =async (data) => {
+        setLoading(true)
         const adoptionData = {
             ...data,
-            petId: pet.id,
+            petId: pet._id,
             petName: pet.name,
             petImage: pet.image,
+            petOwner: pet.email,
+            status: 'pending',
+            requestedAt : new Date()
         };
-
         console.log("Adoption Request Submitted:", adoptionData);
-        alert("Adoption request sent successfully!");
+        const response = await axiosSecure.post('/adoptionRequests', adoptionData);
+        console.log(response.data);
+        toast.success('Adoption request sent successfully!');
         setIsModalOpen(false);
+        setLoading(false)
     };
 
     if (!pet) {
@@ -60,9 +49,10 @@ const PetDetails = () => {
                     <img src={pet.image} alt={pet.name} className="w-full h-[500px] object-cover" />
                 </div>
 
-                {/* Right: Pet Details [cite: 35] */}
+                {/* Right: Pet Details  */}
                 <div className="space-y-6">
                     <h1 className="text-5xl font-extrabold">{pet.name}</h1>
+                    <p className='text-slate-500'>{pet.longDescription}</p>
                     <div className="flex gap-4">
                         <span className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
                             <Calendar size={16} /> {pet.age}
@@ -86,7 +76,7 @@ const PetDetails = () => {
 
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle className="text-2xl font-bold">Adopt {pet.name}</DialogTitle>
+                                <DialogTitle className="text-2xl font-bold"> Adopt<span className='text-purple-500 italic'> {pet.name}</span></DialogTitle>
                             </DialogHeader>
 
                             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
@@ -95,7 +85,9 @@ const PetDetails = () => {
                                     <label className="text-sm font-semibold flex items-center gap-2">
                                         <User size={16} /> User Name
                                     </label>
-                                    <Input {...register("userName")} disabled className="bg-muted" />
+                                    <Input {...register("userName")} 
+                                    defaultValue={user?.displayName}
+                                    disabled className="bg-muted" />
                                 </div>
 
                                 {/* Email (Disabled)  */}
@@ -103,7 +95,9 @@ const PetDetails = () => {
                                     <label className="text-sm font-semibold flex items-center gap-2">
                                         <Mail size={16} /> Email Address
                                     </label>
-                                    <Input {...register("email")} disabled className="bg-muted" />
+                                    <Input {...register("email")} disabled
+                                    defaultValue={user?.email}
+                                    className="bg-muted" />
                                 </div>
 
                                 {/* Phone Number */}
@@ -133,7 +127,10 @@ const PetDetails = () => {
 
                                 {/* Submit Button */}
                                 <Button type="submit" className="w-full h-12 text-lg">
-                                    Submit Adoption Request
+                                  {
+                                    loading ? <Loader2 className="animate-spin" /> : <span>Submit Adoption Request</span>
+                                  }
+                                    
                                 </Button>
                             </form>
                         </DialogContent>

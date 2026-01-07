@@ -26,20 +26,7 @@ import useAuth from '@/hooks/useAuth';
 const MyAdded = () => {
   const axiosSecure = useAxiosSecure();
   const {user} = useAuth()
-  //   { id: 1, name: "Buddy", category: "Dog", image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1", adopted: false },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: false },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: false },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: false },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: false },
-  //   { id: 2, name: "Luna", category: "Cat", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-
-  // ]);
+  
   const {data: myAdded =[]} = useQuery({
     queryKey: ['myAdded',user?.email],
     enabled: !!user?.email,
