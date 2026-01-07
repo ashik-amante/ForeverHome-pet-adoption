@@ -45,7 +45,8 @@ const CreateDonation = () => {
         createdAt: new Date(),
         email: user?.email,
         donors: [],
-        isPaused: false
+        isPaused: false,
+        lastDate: data.lastDate
       }
       console.log(campaignData);
       console.log(campaignData);

@@ -17,6 +17,7 @@ import MyCampaign from "@/pages/Dashboard/MyCampaign";
 import MyDonation from "@/pages/Dashboard/MyDonation";
 import UpdatePet from "@/pages/Dashboard/UpdatePet";
 import axios from "axios";
+import EditDonation from "@/pages/Dashboard/EditDonation";
 
 
 
@@ -98,6 +99,14 @@ const router = createBrowserRouter([
       {
         path: 'update-pet/:id',
         element: <UpdatePet/>
+      },
+      {
+        path: 'edit-donation/:id',
+        element: <EditDonation/>,
+        loader: async ({params})=>{
+          const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
+          return res.data
+        }
       }
     ]
   }

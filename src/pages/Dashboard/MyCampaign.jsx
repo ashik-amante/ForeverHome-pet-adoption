@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '@/hooks/useAuth';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 const MyDonations = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,9 +98,11 @@ const MyDonations = () => {
           {/* Edit Button */}
           <button 
             className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
-            onClick={() => window.location.href = `/dashboard/edit-donation/${row.original.id}`}
+            
           >
-            <Edit3 size={16} />
+            <Link to={`/dashboard/edit-donation/${row.original._id}`}>
+              <Edit3 size={16} />
+            </Link>
           </button>
 
           {/* View Donators Button */}
