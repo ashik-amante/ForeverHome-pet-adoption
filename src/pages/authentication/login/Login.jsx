@@ -1,32 +1,49 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Github, Chrome, ArrowRight, LogIn } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
+import useAxiosPublic from '@/hooks/useAxiosPublic';
+import { toast } from 'sonner';
 
 const Login = () => {
-    const {loginUser} = useAuth()
+  const { loginUser,googleSignin } = useAuth()
+  const axiosPublic = useAxiosPublic()
+  const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit =async (data) => {
+  const onSubmit = async (data) => {
     console.log("Login Data:", data);
     try {
-        const result = await loginUser(data.email,data.password)
-        console.log(result.user);
-        alert("Login successful!");
+      const result = await loginUser(data.email, data.password)
+      console.log(result.user);
+      alert("Login successful!");
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    console.log(`Logging in with ${provider}`);
-  };
+  // google login
+  const handleGoogleLogin = async () => {
+    const result = await googleSignin()
+    const userData = {
+      name: result.user.displayName,
+      email: result.user.email,
+      image: result.user.photoURL,
+      role: "user",
+      createdAt: new Date()
+    }
+
+    const saveUser = await axiosPublic.post('/users', userData)
+    console.log('save user info', saveUser);
+    toast.success(' Successful!')
+    navigate('/')
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/30 p-4 py-12">
       <div className="w-full max-w-md bg-background border border-border rounded-[2.5rem] shadow-2xl p-8 md:p-12">
-        
+
         {/* Header */}
         <div className="text-center space-y-2 mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-primary/10 text-primary mb-4">
@@ -43,9 +60,9 @@ const Login = () => {
             <label className="text-sm font-semibold flex items-center gap-2 text-foreground/80">
               <Mail size={16} className="text-primary" /> Email Address
             </label>
-            <input 
+            <input
               type="email"
-              {...register("email", { 
+              {...register("email", {
                 required: "Email is required",
                 pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" }
               })}
@@ -63,7 +80,7 @@ const Login = () => {
               </label>
               <a href="#" className="text-xs text-primary hover:underline font-medium">Forgot Password?</a>
             </div>
-            <input 
+            <input
               type="password"
               {...register("password", { required: "Password is required" })}
               className="w-full px-4 py-3 rounded-2xl border border-border bg-secondary/20 focus:ring-2 focus:ring-primary outline-none transition-all placeholder:text-muted-foreground/50"
@@ -73,8 +90,8 @@ const Login = () => {
           </div>
 
           {/* Submit Button */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-bold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/30 transition-all active:scale-[0.98]"
           >
             Login <ArrowRight size={18} />
@@ -89,14 +106,14 @@ const Login = () => {
 
         {/* Social Logins  */}
         <div className="grid grid-cols-2 gap-4">
-          <button 
-            onClick={() => handleSocialLogin('Google')}
+          <button
+            onClick={handleGoogleLogin}
             className="flex items-center justify-center gap-3 py-3.5 border border-border rounded-2xl hover:bg-secondary/50 transition-all font-semibold text-sm shadow-sm"
           >
             <Chrome size={18} className="text-red-500" /> Google
           </button>
-          <button 
-            onClick={() => handleSocialLogin('GitHub')}
+          <button
+            
             className="flex items-center justify-center gap-3 py-3.5 border border-border rounded-2xl hover:bg-secondary/50 transition-all font-semibold text-sm shadow-sm"
           >
             <Github size={18} /> GitHub

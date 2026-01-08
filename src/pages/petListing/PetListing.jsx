@@ -1,5 +1,5 @@
-import React, {  useState } from 'react';
-import { Search, MapPin, Calendar, ArrowRight } from "lucide-react";
+import React, { useState } from 'react';
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PetCard from '../shared/PetCard';
@@ -7,25 +7,32 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 
 const PetListing = () => {
-
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
 
-  const {data: pets =[]} = useQuery({
+  const { data: pets = [] } = useQuery({
     queryKey: ['pets'],
     queryFn: async () => {
-      const res = await axiosSecure.get('/pets')
-      return res.data
+      const res = await axiosSecure.get('/pets');
+      return res.data;
     }
-  })
+  });
 
   console.log(pets);
 
- 
 
-  
   const sortedPets = pets.sort((a, b) => new Date(b.date) - new Date(a.date));
+  console.log('sorted', sortedPets);
+
+  // Filter by search and category
+const filteredPets = sortedPets.filter((pet) => {
+  const petName = pet.name || "";
+  const matchesName = petName.toLowerCase().includes(searchTerm.toLowerCase());
+  const matchesCategory = category === 'all' || pet.category === category;
+  return matchesName && matchesCategory;
+});
+
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -42,15 +49,15 @@ const PetListing = () => {
         </div>
         
         <div className="w-full md:w-1/4">
-          <Select onValueChange={(value) => setCategory(value)}>
+          <Select onValueChange={(value) => setCategory(value)} value={category}>
             <SelectTrigger className="h-12 bg-background">
               <SelectValue placeholder="Select Category" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="dogs">Dogs</SelectItem>
-              <SelectItem value="cats">Cats</SelectItem>
-              <SelectItem value="rabbits">Rabbits</SelectItem>
+              <SelectItem value="dog">Dogs</SelectItem>
+              <SelectItem value="cat">Cats</SelectItem>
+              <SelectItem value="rabbit">Rabbits</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -58,10 +65,11 @@ const PetListing = () => {
 
       {/* 3-Column Grid Layout  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sortedPets.map((pet) => (
-            <PetCard key={pet._id} pet={pet} />
-       
-        ))} 
+        {filteredPets.length > 0 ? (
+          filteredPets.map((pet) => <PetCard key={pet._id} pet={pet} />)
+        ) : (
+          <p className="text-center col-span-full text-muted-foreground">No pets found.</p>
+        )}
       </div>
     </div>
   );

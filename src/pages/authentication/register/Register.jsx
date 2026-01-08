@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 
 
 const Register = () => {
-  const { createUser, updateUserData } = useAuth()
+  const { createUser, updateUserData,googleSignin } = useAuth()
   const axiosPublic = useAxiosPublic()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -61,6 +61,22 @@ const Register = () => {
       setLoading(false)
     }
   };
+  // google login
+  const handleGoogleLogin = async() => {
+    const result = await googleSignin()
+     const userData = {
+        name: result.user.displayName,
+        email: result.user.email,
+        image: result.user.photoURL,
+        role: "user",
+        createdAt: new Date()
+      }
+
+      const saveUser = await axiosPublic.post('/users', userData)
+      console.log('save user info', saveUser);
+      toast.success('Registration successful!')
+    navigate('/')
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary/30 p-4 py-12">
@@ -144,7 +160,7 @@ const Register = () => {
             </button>
           </form>
 
-          {/* Social Logins [cite: 61, 62] */}
+          {/* Social Logins  */}
           <div className="mt-8">
             <div className="relative flex items-center justify-center mb-6">
               <div className="w-full border-t border-border"></div>
@@ -152,7 +168,7 @@ const Register = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-2 py-3 border border-border rounded-xl hover:bg-secondary/50 transition-all font-medium">
+              <button onClick={handleGoogleLogin} className="flex items-center justify-center gap-2 py-3 border border-border rounded-xl hover:bg-secondary/50 transition-all font-medium">
                 <Chrome size={18} className="text-red-500" /> Google
               </button>
               <button className="flex items-center justify-center gap-2 py-3 border border-border rounded-xl hover:bg-secondary/50 transition-all font-medium">

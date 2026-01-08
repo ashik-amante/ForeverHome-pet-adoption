@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAw1axn-r2pfcFn5nlP4pYDWnQH5TO5EeU",
-  authDomain: "foreverhome-21484.firebaseapp.com",
-  projectId: "foreverhome-21484",
-  storageBucket: "foreverhome-21484.firebasestorage.app",
-  messagingSenderId: "375510828860",
-  appId: "1:375510828860:web:9d9c14381390ff8d89c039"
+  apiKey: import.meta.env.apiKey,
+  authDomain: import.meta.env.authDomain,
+  projectId: import.meta.env.projectId,
+  storageBucket: import.meta.env.storageBucket,
+  messagingSenderId: import.meta.env.messagingSenderId,
+  appId: import.meta.env.appId
 };
 
 // Initialize Firebase

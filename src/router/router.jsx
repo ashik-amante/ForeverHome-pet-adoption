@@ -18,6 +18,12 @@ import MyDonation from "@/pages/Dashboard/MyDonation";
 import UpdatePet from "@/pages/Dashboard/UpdatePet";
 import axios from "axios";
 import EditDonation from "@/pages/Dashboard/EditDonation";
+import Forbidden from "@/components/Forbidden";
+import ErrorPage from "@/components/ErrorPage";
+import PrivateRoute from "./PrivateRoute";
+import AllPets from "@/pages/Dashboard/AllPets";
+import AllDonations from "@/pages/Dashboard/AllDonations";
+import AdminRoute from "./AdminRoute";
 
 
 
@@ -25,6 +31,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     Component:RootLayout,
+    errorElement: <ErrorPage/>,
     children: [
         {
             path:"/",
@@ -53,9 +60,14 @@ const router = createBrowserRouter([
             const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
             return res.data
           }
+        },
+        {
+          path: '/forbidden',
+          element: <Forbidden/>
         }
     ]
   },
+  // authentication routes
   {
     path: '/',
     element: <AuthenticationLayout/>,
@@ -70,9 +82,11 @@ const router = createBrowserRouter([
       }
     ]
   },
+
+  // dashboard routes
   {
     path: '/dashboard',
-    element: <DashboardLayout/>,
+    element: <PrivateRoute><DashboardLayout/></PrivateRoute>,
     children: [
       {
         path: 'add-pet',
@@ -110,6 +124,15 @@ const router = createBrowserRouter([
           const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
           return res.data
         }
+      },
+      // Admin routes
+      {
+        path: 'all-pets',
+        element: <AllPets/>
+      },
+      {
+        path: 'all-donations',
+        element: <AdminRoute><AllDonations/></AdminRoute>
       }
     ]
   }
