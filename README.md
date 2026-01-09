@@ -6,9 +6,9 @@ A full-stack **MERN-based web application** designed to help pets find loving ho
 
 ## 🔗 Live Demo
 
-👉 **Live Site:** [https://your-vercel-link.vercel.app](https://your-vercel-link.vercel.app)
-👉 **Client Repo:** [https://github.com/your-username/foreverhome-client](https://github.com/your-username/foreverhome-client)
-👉 **Server Repo:** [https://github.com/your-username/foreverhome-server](https://github.com/your-username/foreverhome-server)
+👉 **Live Site:** [https://foreverhome-21484.web.app/](https://foreverhome-21484.web.app/)
+👉 **Client Repo:** [https://github.com/ashik-amante/ForeverHome-pet-adoption](https://github.com/ashik-amante/ForeverHome-pet-adoption)
+👉 **Server Repo:** [https://github.com/ashik-amante/ForeverHome-Server](https://github.com/ashik-amante/ForeverHome-Server)
 
 ---
 
