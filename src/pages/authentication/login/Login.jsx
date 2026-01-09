@@ -47,7 +47,7 @@ const Login = () => {
         {/* Header */}
         <div className="text-center space-y-2 mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-primary/10 text-primary mb-4">
-            <LogIn size={32} />
+            <Link to='/'><LogIn size={32} /></Link>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Welcome Back</h1>
           <p className="text-muted-foreground text-sm">Please enter your details to login</p>

@@ -14,7 +14,7 @@ const Footer = () => {
               <div className="bg-primary p-1.5 rounded-lg">
                 <Heart className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold tracking-tight">PetAdopt</span>
+              <span className="text-2xl font-bold tracking-tight">ForeverHome</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               We are passionate about leveraging technology to make a positive impact on the lives of animals. Our mission is to unite pets with their forever families.
@@ -55,7 +55,7 @@ const Footer = () => {
             <ul className="space-y-4 text-muted-foreground">
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0" />
-                <span>123 Adoption Way, Pet City</span>
+                <span>123 Dhaka, Bangladesh</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
@@ -63,7 +63,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>support@petadopt.com</span>
+                <span>abdullahashik17@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -71,7 +71,7 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 PetAdopt Platform. All rights reserved.</p>
+          <p>© 2025 ForeverHome. All rights reserved.</p>
           <div className="flex gap-6">
             <Link to="#" className="hover:underline">Privacy Policy</Link>
             <Link to="#" className="hover:underline">Terms of Service</Link>
