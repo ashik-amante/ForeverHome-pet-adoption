@@ -1,17 +1,138 @@
-# React + Vite
+# 🐾 ForeverHome – Pet Adoption & Donation Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack **MERN-based web application** designed to help pets find loving homes and enable users to support animals through donation campaigns. The platform includes secure authentication, role-based dashboards, adoption request handling, and Stripe-powered donations.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔗 Live Demo
 
-## React Compiler
+👉 **Live Site:** [https://foreverhome-21484.web.app/](https://foreverhome-21484.web.app/)
+👉 **Client Repo:** [https://github.com/ashik-amante/ForeverHome-pet-adoption](https://github.com/ashik-amante/ForeverHome-pet-adoption)
+👉 **Server Repo:** [https://github.com/ashik-amante/ForeverHome-Server](https://github.com/ashik-amante/ForeverHome-Server)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+##  Key Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# ForeverHome-pet-adoption
+###  Public Features
+
+* Browse available pets with **search, category filtering**
+* View detailed pet profiles and submit **adoption requests**
+* Explore donation campaigns with progress tracking
+* Secure online donations using **Stripe**
+
+###  Authentication & Security
+
+* Firebase Authentication (Email/Password, Google)
+* JWT-based authorization
+* Role-based access control (**User & Admin**)
+* Protected routes for dashboards and sensitive actions
+
+###  User Dashboard
+
+* Add, update, and manage pets
+* View and manage adoption requests
+* Create and manage donation campaigns
+* Track personal donation history
+
+###  Admin Dashboard
+
+* Manage all users and assign admin roles
+* View, update, or delete any pet
+* Manage all donation campaigns (edit, pause/unpause)
+
+---
+
+##  Tech Stack
+
+### Frontend
+
+* React.js
+* React Router
+* Tailwind CSS
+* ShadCN UI 
+* TanStack Table
+* React Hook Form
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB 
+* JWT Authentication
+
+### Authentication & Payments
+
+* Firebase Authentication
+* Stripe Payment Gateway
+
+### Tools & Deployment
+
+* Vercel (Frontend)
+* Cloudinary / imgbb (Image Uploads)
+* Git & GitHub
+
+
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repositories
+
+```bash
+git clone https://github.com/ashik-amante/ForeverHome-pet-adoption
+git clone https://github.com/ashik-amante/ForeverHome-Server
+```
+
+### 2️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Environment Variables
+
+Create a `.env` file in both client & server:
+
+#### Client
+
+```env
+VITE_FIREBASE_API_KEY=your_key
+VITE_STRIPE_PUBLIC_KEY=your_key
+```
+
+#### Server
+
+```env
+STRIPE_SECRET_KEY=your_key
+DB_USER=your user
+DB_PASS=your password
+```
+
+### 4️⃣ Run the project
+
+```bash
+# Client
+npm run dev
+
+# Server
+nodemon index.js
+```
+
+---
+
+## 🚀 Deployment
+
+* Frontend deployed on **Firebase**
+* Backend deployed on **Vercel**
+
+---
+
+## 📌 Future Improvements
+
+* Email notifications for adoption status
+* Admin analytics dashboard
+* Refund handling via Stripe Webhooks
+* Server-side caching for performance
+
+---
+
