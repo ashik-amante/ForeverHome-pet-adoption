@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,} from 'react-router-dom'
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Switch } from "@/components/ui/switch"
 import useAuth from '@/hooks/useAuth'
-import { Menu } from 'lucide-react' 
+import { Cross, Menu, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 const Navbar = () => {
     const { user, logOut } = useAuth()
@@ -24,7 +25,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         await logOut()
-        alert("Logout successful!")
+        toast.success('Logout successful!')
     }
 
     return (
@@ -99,12 +100,12 @@ const Navbar = () => {
                     </div> */}
 
                     {/* Mobile Hamburger */}
-                    <div className='md:hidden'>
+                    <div className='md:hidden '>
                         <Button
                             variant="outline"
                             onClick={() => setMenuOpen(!menuOpen)}
                         >
-                            <Menu size={20} />
+                            {menuOpen ? <X size={20} /> : <Menu size={20} />}
                         </Button>
                     </div>
                 </div>
@@ -112,24 +113,30 @@ const Navbar = () => {
 
             {/* Mobile Menu */}
             {menuOpen && (
-                <div className='md:hidden mt-2 space-y-2 px-2'>
-                    <Link to='/' className='block py-2'>Home</Link>
-                    <Link to='/pet-listing' className='block py-2'>Pet Listing</Link>
-                    <Link to='/donation' className='block py-2'>Donation Campaign</Link>
-                    {!user ? (
-                        <Link to='/login' className='block py-2'>Login</Link>
-                    ) : (
-                        <>
-                            <Link to='/dashboard' className='block py-2'>Dashboard</Link>
-                            <button
-                                onClick={handleLogout}
-                                className='block py-2 text-red-600 w-full text-left'
-                            >
-                                Logout
-                            </button>
-                        </>
-                    )}
-                </div>
+                <>
+                    <div
+                        className="fixed inset-0 bg-black/30 z-40 transition-opacity duration-300"
+                        onClick={() => setMenuOpen(false)}
+                    />
+                    <div className="fixed top-16 right-4 z-50 w-56 rounded-xl bg-background shadow-2xl p-4 space-y-2 transform transition-all duration-300 ease-out translate-y-0 opacity-100 ">
+                        <Link onClick={() => setMenuOpen(false)} to='/' className='block py-2'>Home</Link>
+                        <Link onClick={() => setMenuOpen(false)} to='/pet-listing' className='block py-2'>Pet Listing</Link>
+                        <Link onClick={() => setMenuOpen(false)} to='/donation' className='block py-2'>Donation Campaign</Link>
+                        {!user ? (
+                            <Link to='/login' className='block py-2'>Login</Link>
+                        ) : (
+                            <>
+                                <Link to='/dashboard' className='block py-2'>Dashboard</Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className='block py-2 text-red-600 w-full text-left'
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </>
             )}
         </div>
     )

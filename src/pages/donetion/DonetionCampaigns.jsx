@@ -18,7 +18,7 @@ const DonationCampaigns = () => {
 
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 ">
       <h2 className="text-4xl font-bold mb-10 text-center">Donation Campaigns</h2>
 
       {/* 3 Column Grid  */}
@@ -27,16 +27,18 @@ const DonationCampaigns = () => {
           <div key={camp._id} className="bg-background border border-border rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
             <img src={camp.image} alt={camp.petName} className="w-full h-56 object-cover" />
 
-            <div className="p-6 space-y-4">
-              <h3 className="text-2xl font-bold">{camp.requiredAmount}</h3>
+            <div className="p-6">
+              <h3 className="text-2xl font-bold italic">{camp.petName}</h3>
+            </div>
 
+            <div className="p-6 space-y-4">
               <div className="flex justify-between text-sm font-medium">
                 <span>Goal: ${camp.requiredAmount}</span>
                 <span className="text-primary">Raised: ${camp.donatedAmount}</span>
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-secondary h-3 rounded-full overflow-hidden">
                 <div
                   className="bg-primary h-full transition-all"
                   style={{ width: `${(camp.donatedAmount / camp.requiredAmount) * 100}%` }}

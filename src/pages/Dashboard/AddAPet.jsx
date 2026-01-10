@@ -32,7 +32,7 @@ const AddPet = () => {
     const imageUrl = petUrl?.data?.data?.url
 
     const petData = {
-      name: data.petName,
+      petName: data.petName,
       age: data.petAge,                  
       location: data.petLocation,        
       shortDescription: data.shortDescription,

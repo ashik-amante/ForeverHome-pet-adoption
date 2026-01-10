@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Mail, Lock, Github, Chrome, ArrowRight, LogIn } from "lucide-react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
 import { toast } from 'sonner';
@@ -10,6 +10,8 @@ const Login = () => {
   const { loginUser,googleSignin } = useAuth()
   const axiosPublic = useAxiosPublic()
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || '/';
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
@@ -17,7 +19,8 @@ const Login = () => {
     try {
       const result = await loginUser(data.email, data.password)
       console.log(result.user);
-      alert("Login successful!");
+      toast.success('Login successful!')
+      navigate(from)
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +40,7 @@ const Login = () => {
     const saveUser = await axiosPublic.post('/users', userData)
     console.log('save user info', saveUser);
     toast.success(' Successful!')
-    navigate('/')
+    navigate(from)
   }
 
   return (

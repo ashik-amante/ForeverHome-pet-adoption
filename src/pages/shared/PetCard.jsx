@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 
 const PetCard = ({pet}) => {
-    const {name,image,location,age,_id,category} = pet
+    const {petName,image,location,age,_id,category} = pet
     console.log(pet);
   return (
     <div className="group bg-background border border-border rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300">
@@ -24,7 +24,7 @@ const PetCard = ({pet}) => {
       {/* Info */}
       <div className="p-6 space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-2xl font-bold text-foreground">{name}</h3>
+          <h3 className="text-2xl font-bold text-foreground">{petName}</h3>
           <div className="flex items-center">
             <Calendar size={16} className="text-primary" />
             <span className="text-muted-foreground ml-2">{age}</span>
