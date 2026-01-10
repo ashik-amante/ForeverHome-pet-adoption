@@ -69,7 +69,7 @@ A full-stack **MERN-based web application** designed to help pets find loving ho
 ### Tools & Deployment
 
 * Vercel (Frontend)
-* Cloudinary / imgbb (Image Uploads)
+* imgbb (Image Uploads)
 * Git & GitHub
 
 
