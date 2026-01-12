@@ -17,9 +17,10 @@ const DonationDetails = () => {
   const { id } = useParams();
   const pet = useLoaderData();
   const axiosSecure = useAxiosSecure();
+  console.log(pet);
 
 
-  const {data : recommended = []} = useQuery({
+  const {data : recommended = [],refetch} = useQuery({
     queryKey: ['recommended'],
     queryFn: async () => {
       const res = await axiosSecure.get('/donationCampaigns')
@@ -93,6 +94,7 @@ const DonationDetails = () => {
                     amount={amount} 
                     petId={pet._id} 
                     petName={pet.petName}
+                    refetch={refetch}
                     closeModal={() => setOpen(false)} 
                   />
                 </Elements>

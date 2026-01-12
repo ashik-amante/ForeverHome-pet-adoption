@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 
 const PetCard = ({pet}) => {
     const {petName,image,location,age,_id,category} = pet
-    console.log(pet);
+
   return (
     <div className="group bg-background border border-border rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300">
       {/* Image */}

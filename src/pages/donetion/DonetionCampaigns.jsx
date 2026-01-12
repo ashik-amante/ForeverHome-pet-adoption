@@ -7,7 +7,7 @@ import useAxiosSecure from '@/hooks/useAxiosSecure';
 const DonationCampaigns = () => {
   const axiosSecure = useAxiosSecure()
 
-  const { data: donations = [] } = useQuery({
+  const { data: donations = [],refetch} = useQuery({
     queryKey: ['donations'],
     queryFn: async () => {
       const res = await axiosSecure.get('/donationCampaigns')
@@ -15,7 +15,7 @@ const DonationCampaigns = () => {
     }
   })
   console.log(donations);
-
+refetch()
 
   return (
     <div className="container mx-auto px-4 py-12 ">

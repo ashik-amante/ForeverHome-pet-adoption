@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useAuth from "@/hooks/useAuth";
 
-const CheckoutForm = ({ amount, petName, closeModal, petId }) => {
+const CheckoutForm = ({ amount, petName, closeModal, petId,refetch }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [processing, setProcessing] = useState(false);
@@ -26,11 +26,9 @@ const CheckoutForm = ({ amount, petName, closeModal, petId }) => {
         }
 
         try {
-            // ১. পেমেন্ট ইনটেন্ট তৈরি করা (ব্যাকএন্ড থেকে clientSecret আনা)
             const res = await axiosSecure.post('/create-payment-intent', { amount });
             const clientSecret = res.data.clientSecret;
 
-            // ২. পেমেন্ট কনফার্ম করা
             const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: card,
@@ -45,8 +43,8 @@ const CheckoutForm = ({ amount, petName, closeModal, petId }) => {
                 toast.error(confirmError.message);
                 setProcessing(false);
             } else if (paymentIntent.status === 'succeeded') {
-                // ৩. পেমেন্ট সফল হলে ডেটাবেসে সেভ করা
-                const paymentData = {
+             
+                const donationData = {
                     campaignId: petId,
                     donorEmail: user?.email,
                     donorName: user?.displayName,
@@ -56,10 +54,11 @@ const CheckoutForm = ({ amount, petName, closeModal, petId }) => {
                     petName: petName
                 };
 
-                const response = await axiosSecure.post('/payments', paymentData);
+                const response = await axiosSecure.post('/donations', donationData);
 
                 if (response.data.insertedId) {
-                    toast.success(`Thank you for donating $${amount}!`);
+                    toast.success(`Thank you for your $${amount}! donating `);
+                    refetch()
                     closeModal();
                 }
             }
@@ -73,7 +72,7 @@ const CheckoutForm = ({ amount, petName, closeModal, petId }) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="p-4 border rounded-xl bg-muted/30">
-                <CardElement options={{ style: { base: { fontSize: '16px' } } }} />
+                <CardElement  />
             </div>
             <Button type="submit" disabled={!stripe || processing} className="w-full h-12">
                 {processing ? <Loader2 className="animate-spin" /> : `Pay $ ${amount}`}
