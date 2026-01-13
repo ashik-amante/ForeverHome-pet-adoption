@@ -22,12 +22,13 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useAuth from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 const MyAdded = () => {
   const axiosSecure = useAxiosSecure();
   const {user} = useAuth()
   
-  const {data: myAdded =[]} = useQuery({
+  const {data: myAdded =[],refetch} = useQuery({
     queryKey: ['myAdded',user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -37,12 +38,12 @@ const MyAdded = () => {
   })
   console.log(myAdded);
 
-  const handleDelete = (id) => {
+  const handleDelete =async (id) => {
     console.log(id);
-  };
-
-  const handleAdopted = (id) => {
-     console.log(id);
+    const response = await axiosSecure.delete(`/pets/${id}`)
+    console.log(response.data);
+    toast.success('Pet deleted successfully!')
+    refetch()
   };
 
   const columns = useMemo(() => [
@@ -58,7 +59,7 @@ const MyAdded = () => {
       ),
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'petName',
       header: ({ column }) => (
         <button className="flex items-center gap-1 hover:text-primary font-bold" onClick={() => column.toggleSorting()}>
           Name <ArrowUpDown size={14} />
@@ -89,7 +90,7 @@ const MyAdded = () => {
         <div className="flex items-center gap-3">
           {/* Update Button */}
           <button className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-            <Link to={`/dashboard/update-pet/${row.original.id}`}>
+            <Link to={`/dashboard/update-pet/${row.original._id}`}>
               <Edit size={16} />
             </Link>
           </button>
@@ -111,7 +112,7 @@ const MyAdded = () => {
               <AlertDialogFooter>
                 <AlertDialogCancel className="rounded-xl border-slate-200">Cancel</AlertDialogCancel>
                 <AlertDialogAction 
-                  onClick={() => handleDelete(row.original.id)}
+                  onClick={() => handleDelete(row.original._id)}
                   className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
                 >
                   Yes, Delete
@@ -120,33 +121,6 @@ const MyAdded = () => {
             </AlertDialogContent>
           </AlertDialog>
 
-          {/* Adopted Button Modal */}
-          {!row.original.adopted && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
-                  <CheckCircle size={16} />
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="rounded-3xl">
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-xl font-bold text-emerald-600">Mark as Adopted?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Is <b>{row.original.name}</b> successfully adopted? This will update the status across the platform.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="rounded-xl">No</AlertDialogCancel>
-                  <AlertDialogAction 
-                    onClick={() => handleAdopted(row.original.id)}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
-                  >
-                    Yes, Adopted
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
         </div>
       ),
     },

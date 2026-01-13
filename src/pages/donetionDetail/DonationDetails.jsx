@@ -1,13 +1,14 @@
 import React, { useState,  } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import CheckoutForm from '../payment/CheckoutForm';
 import { useQuery } from '@tanstack/react-query';
 import PetCard from '../shared/PetCard';
+import useAuth from '@/hooks/useAuth';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
@@ -17,6 +18,8 @@ const DonationDetails = () => {
   const { id } = useParams();
   const pet = useLoaderData();
   const axiosSecure = useAxiosSecure();
+  const {user} = useAuth()
+  const navigate = useNavigate()
   console.log(pet);
 
 
@@ -62,11 +65,17 @@ const DonationDetails = () => {
         {/* Donate Now Modal Button */}
         <div className="mt-10">
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button size="lg" className="w-full md:w-auto px-12 h-14 text-lg rounded-2xl shadow-xl shadow-primary/20">
+            
+              <Button  onClick ={()=>{
+                if(!user){
+                  navigate('/login', {state : {from : location.pathname}})
+                }else{
+                  setOpen(true)
+                }
+              }} size="lg" className="w-full md:w-auto px-12 h-14 text-lg rounded-2xl shadow-xl shadow-primary/20 cursor-pointer">
                 Donate Now
               </Button>
-            </DialogTrigger>
+            
             
             <DialogContent className="rounded-[2rem] sm:max-w-[425px]">
               <DialogHeader>

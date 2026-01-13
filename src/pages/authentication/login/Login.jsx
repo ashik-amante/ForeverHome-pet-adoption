@@ -12,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || '/';
+  console.log(location.state, 'from  logini');
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {

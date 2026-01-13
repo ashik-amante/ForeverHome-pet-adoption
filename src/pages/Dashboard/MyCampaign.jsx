@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 
 const MyDonations = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDonors, setSelectedDonors] = useState([]);
+  const [campaignId, setCapmaignId] = useState('');
   const {user} = useAuth()
   const axiosSecure = useAxiosSecure()
 
@@ -33,6 +33,16 @@ const MyDonations = () => {
   })
   console.log(myCampaigns);
 
+  // fetch donor data of this campaign 
+  const { data: donors = [] } = useQuery({
+    queryKey: ['donors',campaignId],
+    enabled: !!campaignId,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/donor-details/${campaignId}`)
+      return res.data
+    }
+  })
+
   // pause and resume
   const togglePauseResume =async (id,status) => {
     const newStatus = !status;
@@ -43,9 +53,10 @@ const MyDonations = () => {
     console.log(id,status,newStatus);
   };
 
-  // jandle modal open close
-  const openDonorsModal = (donors) => {
-    setSelectedDonors(donors);
+  // handle donor modal open close
+  const openDonorsModal = (id) => {
+    setCapmaignId(id);
+    console.log(id);
     setIsModalOpen(true);
   };
 
@@ -73,7 +84,7 @@ const MyDonations = () => {
             </div>
             <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200">
               <div 
-                className={`h-full transition-all duration-500 ${progress === 100 ? 'bg-emerald-500' : 'bg-rose-500'}`} 
+                className={`h-full transition-all duration-500 ${progress === 100 ? 'bg-emerald-500' : 'bg-primary'}`} 
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -107,7 +118,7 @@ const MyDonations = () => {
 
           {/* View Donators Button */}
           <button 
-            onClick={() => openDonorsModal(row.original.donors)}
+            onClick={() => openDonorsModal(row.original._id)}
             className="p-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-600 hover:text-white transition-all"
           >
             <Users size={16} />
@@ -171,10 +182,10 @@ const MyDonations = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4 space-y-3">
-            {selectedDonors.length > 0 ? (
-              selectedDonors.map((donor, idx) => (
+            {donors.length > 0 ? (
+              donors.map((donor, idx) => (
                 <div key={idx} className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <span className="font-bold text-slate-700">{donor.name}</span>
+                  <span className="font-bold text-slate-700">{donor.donorName}</span>
                   <span className="text-emerald-600 font-black">${donor.amount}</span>
                 </div>
               ))

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({ amount, petName, closeModal, petId,refetch }) => {
     const stripe = useStripe();
@@ -12,6 +13,7 @@ const CheckoutForm = ({ amount, petName, closeModal, petId,refetch }) => {
     const [processing, setProcessing] = useState(false);
     const axiosSecure = useAxiosSecure()
     const { user } = useAuth()
+    const navigate = useNavigate()
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -47,7 +49,7 @@ const CheckoutForm = ({ amount, petName, closeModal, petId,refetch }) => {
                 const donationData = {
                     campaignId: petId,
                     donorEmail: user?.email,
-                    donorName: user?.displayName,
+                    donorName: user?.displayName || 'Anonymous',
                     transactionId: paymentIntent.id,
                     amount: parseFloat(amount),
                     paidAt: new Date(),
@@ -60,6 +62,7 @@ const CheckoutForm = ({ amount, petName, closeModal, petId,refetch }) => {
                     toast.success(`Thank you for your $${amount}! donating `);
                     refetch()
                     closeModal();
+                    navigate('/dashboard/my-donations')
                 }
             }
         } catch (err) {

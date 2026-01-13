@@ -115,7 +115,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'update-pet/:id',
-        element: <UpdatePet/>
+        element: <UpdatePet/>,
+        loader: async ({params})=>{
+          const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
+          return res.data
+        }
       },
       {
         path: 'edit-donation/:id',

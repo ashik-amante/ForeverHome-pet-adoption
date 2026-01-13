@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MapPin, Calendar, Heart, Phone, Home, Mail, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,33 +12,40 @@ import { toast } from 'sonner';
 
 const PetDetails = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {user} = useAuth()
+    const { user } = useAuth()
     const pet = useLoaderData()
     const axiosSecure = useAxiosSecure()
     const [loading, setLoading] = useState(false)
     const { register, handleSubmit, formState: { errors } } = useForm();
+    console.log(pet);
 
-    const onSubmit =async (data) => {
-        setLoading(true)
-        const adoptionData = {
-            ...data,
-            petId: pet._id,
-            petName: pet.name,
-            petImage: pet.image,
-            petOwner: pet.email,
-            status: 'pending',
-            requestedAt : new Date()
-        };
-        console.log("Adoption Request Submitted:", adoptionData);
-        const response = await axiosSecure.post('/adoptionRequests', adoptionData);
-        console.log(response.data);
-        toast.success('Adoption request sent successfully!');
-        setIsModalOpen(false);
-        setLoading(false)
+    const onSubmit = async (data) => {
+        try {
+            setLoading(true)
+            const adoptionData = {
+                ...data,
+                petId: pet._id,
+                petName: pet.petName,
+                petImage: pet.image,
+                petOwner: pet.email,
+                status: 'pending',
+                requestedAt: new Date()
+            };
+            console.log("Adoption Request Submitted:", adoptionData);
+            const response = await axiosSecure.post('/adoptionRequests', adoptionData);
+            console.log(response.data);
+            toast.success('Adoption request sent successfully!');
+            setIsModalOpen(false);
+            setLoading(false)
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+            setLoading(false)
+        }
     };
-
+    console.log(user.email, pet.email);
     if (!pet) {
-        return <div>Loading...</div>; 
+        return <div>Loading...</div>;
     }
 
     return (
@@ -51,7 +58,7 @@ const PetDetails = () => {
 
                 {/* Right: Pet Details  */}
                 <div className="space-y-6">
-                    <h1 className="text-5xl font-extrabold">{pet.name}</h1>
+                    <h1 className="text-5xl font-extrabold">{pet.petName}</h1>
                     <p className='text-slate-500'>{pet.longDescription}</p>
                     <div className="flex gap-4">
                         <span className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
@@ -69,9 +76,15 @@ const PetDetails = () => {
                     {/* Adopt Button to Open Modal  */}
                     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                         <DialogTrigger asChild>
-                            <Button size="lg" className="w-full md:w-auto px-12 py-7 text-lg rounded-2xl gap-2">
-                                <Heart className="fill-current" /> Adopt {pet.name}
-                            </Button>
+                            <button disabled={user?.email === pet.email} size="lg" className="w-full md:w-auto px-12 py-5 text-2xl rounded-4xl flex items-center gap-3 bg-black text-white cursor-pointer disabled:bg-slate-300 disabled:cursor-not-allowed disabled:text-slate-500">
+                                {
+                                    user?.email === pet.email ? <span className='font-bold text-rose-500'>You can't adopt your own pet</span> : (
+                                        <>
+                                            <Heart className="fill-current" /> Adopt <span className='font-bold'>{pet.petName}</span>
+                                        </>
+                                    )
+                                }
+                            </button>
                         </DialogTrigger>
 
                         <DialogContent className="sm:max-w-[425px]">
@@ -85,9 +98,9 @@ const PetDetails = () => {
                                     <label className="text-sm font-semibold flex items-center gap-2">
                                         <User size={16} /> User Name
                                     </label>
-                                    <Input {...register("userName")} 
-                                    defaultValue={user?.displayName}
-                                    disabled className="bg-muted" />
+                                    <Input {...register("userName")}
+                                        defaultValue={user?.displayName}
+                                        disabled className="bg-muted" />
                                 </div>
 
                                 {/* Email (Disabled)  */}
@@ -96,8 +109,8 @@ const PetDetails = () => {
                                         <Mail size={16} /> Email Address
                                     </label>
                                     <Input {...register("email")} disabled
-                                    defaultValue={user?.email}
-                                    className="bg-muted" />
+                                        defaultValue={user?.email}
+                                        className="bg-muted" />
                                 </div>
 
                                 {/* Phone Number */}
@@ -127,10 +140,10 @@ const PetDetails = () => {
 
                                 {/* Submit Button */}
                                 <Button type="submit" className="w-full h-12 text-lg">
-                                  {
-                                    loading ? <Loader2 className="animate-spin" /> : <span>Submit Adoption Request</span>
-                                  }
-                                    
+                                    {
+                                        loading ? <Loader2 className="animate-spin" /> : <span>Submit Adoption Request</span>
+                                    }
+
                                 </Button>
                             </form>
                         </DialogContent>

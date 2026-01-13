@@ -38,11 +38,11 @@ const AdoptionRequest = () => {
   })
   console.log(adoptionRequests);
 
-  const handleStatus = async (id, status) => {
+  const handleStatus = async (id, status,petId) => {
     console.log(id, status);
     const newStatus = status
     console.log(newStatus);
-    const response = await axiosSecure.patch(`/adoptionRequests/${id}`, { status: newStatus })
+    const response = await axiosSecure.patch(`/adoptionRequests/${id}`, { status: newStatus, petId : petId })
     refetch()
     toast.success('Status updated successfully!')
     console.log(response.data);
@@ -56,6 +56,10 @@ const AdoptionRequest = () => {
       cell: ({ getValue }) => (
         <img src={getValue()} alt="pet" className="w-12 h-12 rounded-xl object-cover border border-rose-100" />
       ),
+    },
+    {
+      accessorKey: 'petName',
+      header: 'Pet Name',
     },
     {
       accessorKey: 'userName',
@@ -98,7 +102,7 @@ const AdoptionRequest = () => {
           {/* Shadcn Reject Modal */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white transition-all shadow-sm">
+              <button disabled={row.original.status === "rejected"} className="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white transition-all shadow-sm  disabled:bg-slate-50 disabled:text-slate-400">
                 <X size={16} />
               </button>
             </AlertDialogTrigger>
@@ -112,7 +116,7 @@ const AdoptionRequest = () => {
               <AlertDialogFooter>
                 <AlertDialogCancel className="rounded-xl border-slate-200">Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={() => handleStatus(row.original._id, "rejected")}
+                  onClick={() => handleStatus(row.original._id ,"rejected",row.original.petId)}
                   className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl"
                 >
                   Yes, Reject
@@ -125,7 +129,7 @@ const AdoptionRequest = () => {
           {!row.original.adopted && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
+                <button disabled={row.original.status === "accepted"}  className="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400">
                   <CheckCircle size={16} />
                 </button>
               </AlertDialogTrigger>
@@ -139,7 +143,7 @@ const AdoptionRequest = () => {
                 <AlertDialogFooter>
                   <AlertDialogCancel className="rounded-xl">No</AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={() => handleStatus(row.original._id, "accepted")}
+                    onClick={() => handleStatus(row.original._id, "accepted", row.original.petId)}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
                   >
                     Yes, Adopted

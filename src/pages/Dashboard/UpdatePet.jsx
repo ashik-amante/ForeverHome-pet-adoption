@@ -2,7 +2,10 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { ImagePlus, PawPrint, MapPin, Calendar, FileText, Send } from "lucide-react";
-import { useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
+import imageUpload from '@/hooks/useImageUpload';
 
 
 const categoryOptions = [
@@ -15,20 +18,48 @@ const categoryOptions = [
 
 const AddPet = () => {
     const {id} = useParams()
-    console.log(id);
-  const { register, handleSubmit, control, formState: { errors } } = useForm();
+    const prevPet = useLoaderData()
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
+    console.log(id,prevPet, 'prevdata and id');
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
+    defaultValues: {
+      petName: prevPet?.petName,
+      petAge: prevPet?.age,
+      petLocation: prevPet?.location,
+      shortDescription: prevPet?.shortDescription,
+      longDescription: prevPet?.longDescription,
+      category: categoryOptions.find(option=> option.value === prevPet?.category),
+    },
+  });
 
-  const onSubmit = async (data) => {
-  
-    const petData = {
-      ...data,
-      category: data.category.value, 
-      addedDate: new Date().toLocaleString(), 
-      adopted: false, 
-    };
+   const onSubmit = async (data) => {
+    try {
+      let imageUrl = prevPet?.image;
+      
+      if(data.petImage && data.petImage.length > 0){
+        const image  = data.petImage[0]
+        const formData = new FormData()
+        formData.append('image', image)
+        imageUrl = await imageUpload(formData)
+      }
+      const petData = {
+        ...data,
+        category: data.category.value,
+        updatedDate: new Date().toLocaleString(),
+        image: imageUrl
+      };
+      const response = await axiosSecure.patch(`/pets/${prevPet._id}`, petData);
+      console.log(response.data);
+      toast.success('Pet added successfully!');
+      navigate('/dashboard/my-pets');
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error);
+      }
+    }
 
-    console.log("Submitting Pet Data:", petData);
-    
   };
 
   return (
@@ -50,7 +81,7 @@ const AddPet = () => {
           <input 
             type="file"
             accept="image/*"
-            {...register("petImage", { required: "Pet image is required" })}
+            {...register("petImage")}
             className="w-full px-4 py-2 rounded-xl border-2 border-dashed border-primary/20 bg-primary/5 cursor-pointer file:bg-primary file:text-primary-foreground file:border-0 file:rounded-full file:px-4 file:py-1 file:mr-4 hover:bg-primary/10 transition-all"
           />
           {errors.petImage && <p className="text-xs text-red-500 mt-1">{errors.petImage.message}</p>}

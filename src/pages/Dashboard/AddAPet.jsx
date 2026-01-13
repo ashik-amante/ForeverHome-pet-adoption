@@ -5,6 +5,8 @@ import { ImagePlus, PawPrint, MapPin, Calendar, FileText, Send, Loader2 } from "
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import axios from 'axios';
 import useAuth from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 
 const categoryOptions = [
@@ -20,6 +22,7 @@ const AddPet = () => {
   const axiosSecure = useAxiosSecure()
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const onSubmit = async (data) => {
     setLoading(true)
@@ -47,7 +50,8 @@ const AddPet = () => {
     try {
       const response = await axiosSecure.post('/pets', petData);
       console.log(response.data);
-      alert("Pet added successfully!");
+      toast.success('Pet added successfully!')
+      navigate('/dashboard/my-pets')
       setLoading(false)
     } catch (error) {
       console.log(error);
