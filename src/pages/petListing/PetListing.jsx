@@ -5,13 +5,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import PetCard from '../shared/PetCard';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import Loading from '@/components/Loading';
 
 const PetListing = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("all");
   const axiosSecure = useAxiosSecure();
 
-  const { data: pets = [] } = useQuery({
+  const { data: pets = [],isLoading } = useQuery({
     queryKey: ['pets'],
     queryFn: async () => {
       const res = await axiosSecure.get('/pets');
@@ -33,7 +34,7 @@ const filteredPets = sortedPets.filter((pet) => {
   return matchesName && matchesCategory;
 });
 
-
+  if(isLoading) return <Loading></Loading>
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Search and Filter Section  */}

@@ -45,7 +45,7 @@ const router = createBrowserRouter([
           path: "/pet-details/:id",
           element: <PetDetails/>,
           loader: async ({params}) => {
-            const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
+            const res = await axios.get(`https://pet-server-tawny.vercel.app/petDetails/${params.id}`)
             return res.data
           }
         },
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
           path: '/donationDetails/:id',
           element: <DonationDetails/>,
           loader: async ({params}) => {
-            const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
+            const res = await axios.get(`https://pet-server-tawny.vercel.app/donationCampaignsDetails/${params.id}`)
             return res.data
           }
         },
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
         path: 'update-pet/:id',
         element: <UpdatePet/>,
         loader: async ({params})=>{
-          const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
+          const res = await axios.get(`https://pet-server-tawny.vercel.app/petDetails/${params.id}`)
           return res.data
         }
       },
@@ -125,7 +125,7 @@ const router = createBrowserRouter([
         path: 'edit-donation/:id',
         element: <EditDonation/>,
         loader: async ({params})=>{
-          const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
+          const res = await axios.get(`https://pet-server-tawny.vercel.app/donationCampaignsDetails/${params.id}`)
           return res.data
         }
       },
