@@ -8,6 +8,7 @@ import Select from 'react-select';
 import imageUpload from '@/hooks/useImageUpload';
 import { toast } from 'sonner';
 import { useLoaderData } from 'react-router-dom';
+import Loading from '@/components/Loading';
 
 
 const categoryOptions = [
@@ -60,9 +61,9 @@ const EditDonation
         console.log(error);
         setLoading(false)
       }
-
-
     }
+
+    if(loading) return <Loading/>
     return (
       <div className='p-8 md:p-6 dark:bg-slate-900 bg-background border border-slate-100 rounded-3xl overflow-hidden shadow-sm max-w-5xl mx-auto'>
 

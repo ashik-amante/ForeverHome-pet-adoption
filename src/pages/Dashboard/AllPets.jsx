@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getSortedRowModel, 
-  flexRender 
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender
 } from '@tanstack/react-table';
 import { Edit, Trash2, CheckCircle, XCircle, ArrowUpDown, ShieldCheck } from 'lucide-react';
 import {
@@ -18,27 +18,43 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
 
 const AllPets = () => {
-  
-  const [pets, setPets] = useState([
-    { id: 1, name: "Buddy", category: "Dog", owner: "user1@email.com", image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1", adopted: false },
-    { id: 2, name: "Luna", category: "Cat", owner: "user2@email.com", image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba", adopted: true },
-    { id: 3, name: "Milo", category: "Rabbit", owner: "user3@email.com", image: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308", adopted: false },
-  ]);
-
-
+  const axiosSecure = useAxiosSecure()
+  const { data: pets = [], refetch } = useQuery({
+    queryKey: ['pets'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/pets');
+      return res.data;
+    }
+  })
+  // handle delete
   const handleDelete = (id) => {
-    setPets(prev => prev.filter(pet => pet.id !== id));
-    toast.success("Pet deleted successfully by Admin");
+    try {
+      const response = axiosSecure.delete(`/pets/${id}`)
+      console.log(response.data);
+      toast.success('Pet deleted successfully!')
+      refetch()
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+    }
   };
-
-
-  const toggleAdoptionStatus = (id) => {
-    setPets(prev => prev.map(pet => 
-      pet.id === id ? { ...pet, adopted: !pet.adopted } : pet
-    ));
-    toast.info("Pet status updated");
+  // handle toggle status
+  const toggleAdoptionStatus = async (id, status) => {
+    try {
+      console.log(id);
+      const NewStatus = !status
+      const response = await axiosSecure.patch(`/pets/status/${id}`, { status: NewStatus })
+      console.log(response.data);
+      toast.success('Status updated successfully!')
+      refetch()
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+    }
   };
 
   const columns = useMemo(() => [
@@ -49,14 +65,14 @@ const AllPets = () => {
         <div className="flex items-center gap-3">
           <img src={row.original.image} alt="" className="w-12 h-12 rounded-xl object-cover" />
           <div>
-            <p className="font-bold text-slate-800">{row.original.name}</p>
+            <p className="font-bold text-slate-800">{row.original.petName}</p>
             <p className="text-[10px] text-muted-foreground uppercase">{row.original.category}</p>
           </div>
         </div>
       ),
     },
     {
-      accessorKey: 'owner',
+      accessorKey: 'email',
       header: 'Added By',
       cell: ({ getValue }) => <span className="text-xs font-medium text-slate-500">{getValue()}</span>
     },
@@ -75,22 +91,22 @@ const AllPets = () => {
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           {/* Update Button */}
-          <button 
+          <button
             className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
-            onClick={() => window.location.href = `/dashboard/edit-pet/${row.original.id}`}
+            onClick={() => window.location.href = `/dashboard/update-pet/${row.original._id}`}
           >
             <Edit size={16} />
           </button>
 
           {/* Toggle Status Button */}
-          <button 
-            onClick={() => toggleAdoptionStatus(row.original.id)}
+          <button
+            onClick={() => toggleAdoptionStatus(row.original._id, row.original.adopted)}
             className={`p-2 rounded-lg transition-all ${row.original.adopted ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}
             title="Change Status"
           >
             {row.original.adopted ? <XCircle size={16} /> : <CheckCircle size={16} />}
           </button>
-          
+
           {/* Delete Button with Shadcn Modal */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -102,13 +118,13 @@ const AllPets = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle className="font-bold text-rose-600">Admin Action: Permanent Deletion</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete <b>{row.original.name}</b>? This pet was added by <b>{row.original.owner}</b>.
+                  Are you sure you want to delete <b>{row.original.petName}</b>? This pet was added by <b>{row.original.email}</b>.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={() => handleDelete(row.original.id)}
+                <AlertDialogAction
+                  onClick={() => handleDelete(row.original._id)}
                   className="bg-rose-600 text-white rounded-xl"
                 >
                   Confirm Delete

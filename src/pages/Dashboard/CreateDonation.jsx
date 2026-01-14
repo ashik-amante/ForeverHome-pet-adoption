@@ -32,7 +32,6 @@ const CreateDonation = () => {
       const formData = new FormData()
       formData.append('image', image)
       const url = await imageUpload(formData)
-      console.log(formData);
 
       const campaignData = {
         petName: data.petName,
@@ -46,20 +45,17 @@ const CreateDonation = () => {
         email: user?.email,
         donors: [],
         isPaused: false,
-        lastDate: data.lastDate
+        lastDate: data.lastDate,
+        location: data?.location || 'Dhaka,Bangladesh'
       }
-      console.log(campaignData);
-      console.log(campaignData);
       const response = await axiosSecure.post('/donationCampaigns', campaignData)
       console.log(response.data);
       toast.success('Campaign created successfully!')
       setLoading(false)
-
     } catch (error) {
       console.log(error);
       setLoading(false)
     }
-
 
   }
   return (

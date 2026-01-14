@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, use } from 'react';
 import { 
   useReactTable, 
   getCoreRowModel, 
@@ -16,12 +16,15 @@ import useAuth from '@/hooks/useAuth';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
+import useUserRole from '@/hooks/useUserRole';
+import Loading from '@/components/Loading';
 
 const MyDonations = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [campaignId, setCapmaignId] = useState('');
   const {user} = useAuth()
   const axiosSecure = useAxiosSecure()
+  const {role,roleLoading}= useUserRole()
 
   // fetch my campaigns
    const { data: myCampaigns = [],refetch } = useQuery({
@@ -100,7 +103,8 @@ const MyDonations = () => {
           {/* Pause/Play Button */}
           <button 
             onClick={() => togglePauseResume(row.original._id, row.original.isPaused)}
-            className={`p-2 rounded-lg transition-all ${row.original.isPaused ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-600'}`}
+            disabled={role !== 'admin'}
+            className={`p-2 rounded-lg transition-all disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-600 ${row.original.isPaused ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-600'}`}
             title={row.original.isPaused ? "Unpause" : "Pause"}
           >
             {row.original.isPaused ? <Play size={16} fill="currentColor" /> : <Pause size={16} fill="currentColor" />}
@@ -133,6 +137,8 @@ const MyDonations = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if(roleLoading) return <Loading/>
 
   return (
     <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">

@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getSortedRowModel, 
-  flexRender 
+import React, { useMemo } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender
 } from '@tanstack/react-table';
-import { Edit, Trash2, Pause, Play, ArrowUpDown, Banknote, ShieldAlert } from 'lucide-react';
+import { Edit, Trash2, Pause, Play, ArrowUpDown, Banknote, ShieldAlert, DollarSign } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,25 +18,46 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
+import Loading from '@/components/Loading';
+import { Link } from 'react-router-dom';
 
 const AllDonations = () => {
- 
-  const [campaigns, setCampaigns] = useState([
-    { id: 1, petName: "Max", maxAmount: 1000, donatedAmount: 450, owner: "admin@pet.com", isPaused: false },
-    { id: 2, petName: "Bella", maxAmount: 500, donatedAmount: 500, owner: "user@test.com", isPaused: true },
-  ]);
+  const axiosSecure = useAxiosSecure();
 
-  
-  const handleDelete = (id) => {
-    setCampaigns(prev => prev.filter(camp => camp.id !== id));
-    toast.error("Campaign deleted by Admin");
+  // fetch all donations
+  const { data: campaigns = [], refetch, isLoading } = useQuery({
+    queryKey: ['donations'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/donationCampaigns')
+      return res.data
+    }
+  })
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await axiosSecure.delete(`/donationCampaigns/${id}`)
+      console.log(response.data);
+      toast.success('Campaign deleted successfully!')
+      refetch()
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+    }
   };
 
-  const togglePause = (id) => {
-    setCampaigns(prev => prev.map(camp => 
-      camp.id === id ? { ...camp, isPaused: !camp.isPaused } : camp
-    ));
-    toast.success("Campaign status updated");
+  const togglePause = async (id, status) => {
+    try {
+      const newStatus = !status;
+      const res = await axiosSecure.patch(`/donationCampaigns/${id}`, { status: newStatus })
+      refetch()
+      console.log(res.data);
+      toast.success('Status updated successfully!')
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+    }
   };
 
   const columns = useMemo(() => [
@@ -45,26 +66,26 @@ const AllDonations = () => {
       header: 'Campaign Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Banknote className="text-emerald-500" size={18} />
+          <DollarSign className="text-emerald-500" size={18} />
           <span className="font-bold">{row.original.petName}</span>
         </div>
       )
     },
     {
-      accessorKey: 'owner',
+      accessorKey: 'email',
       header: 'Organizer',
       cell: ({ getValue }) => <span className="text-xs text-muted-foreground">{getValue()}</span>
     },
     {
       header: 'Progress',
       cell: ({ row }) => {
-        const progress = (row.original.donatedAmount / row.original.maxAmount) * 100;
+        const progress = (row.original.donatedAmount / row.original.requiredAmount) * 100;
         return (
           <div className="w-32 space-y-1">
             <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-              <div className="bg-emerald-500 h-full" style={{ width: `${progress}%` }}></div>
+              <div className="bg-orange-400 h-full" style={{ width: `${progress}%` }}></div>
             </div>
-            <p className="text-[10px] font-medium">${row.original.donatedAmount} / ${row.original.maxAmount}</p>
+            <p className="text-[10px] font-medium tracking-wider">${row.original.donatedAmount} / ${row.original.requiredAmount}</p>
           </div>
         );
       }
@@ -84,21 +105,20 @@ const AllDonations = () => {
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           {/* Edit Button */}
-          <button 
-            className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all"
-            onClick={() => window.location.href = `/dashboard/edit-donation/${row.original.id}`}
-          >
-            <Edit size={16} />
-          </button>
+          <Link to={`/dashboard/edit-donation/${row.original._id}`}>
+            <button className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+              <Edit size={16} />
+            </button>
+          </Link>
 
           {/* Pause/Play Toggle */}
-          <button 
-            onClick={() => togglePause(row.original.id)}
+          <button
+            onClick={() => togglePause(row.original._id, row.original.isPaused)}
             className={`p-2 rounded-lg transition-all ${row.original.isPaused ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}
           >
             {row.original.isPaused ? <Play size={16} /> : <Pause size={16} />}
           </button>
-          
+
           {/* Delete Action */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -117,8 +137,8 @@ const AllDonations = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={() => handleDelete(row.original.id)}
+                <AlertDialogAction
+                  onClick={() => handleDelete(row.original._id)}
                   className="bg-rose-600 text-white rounded-xl"
                 >
                   Delete Campaign
@@ -137,6 +157,9 @@ const AllDonations = () => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
@@ -148,30 +171,34 @@ const AllDonations = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-slate-50/50">
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id} className="p-5 text-[11px] font-black text-slate-400 uppercase tracking-widest">
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            {table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="hover:bg-slate-50/30 transition-colors">
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className="p-5 text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {table.getRowModel().rows.length > 0 ? (
+          <table className="w-full text-left">
+            <thead className="bg-slate-50/50">
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id} className="p-5 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {table.getRowModel().rows.map(row => (
+                <tr key={row.id} className="hover:bg-slate-50/30 transition-colors">
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id} className="p-5 text-sm">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="p-5 text-center text-slate-500">No campaigns found.</div>
+        )}
       </div>
     </div>
   );
