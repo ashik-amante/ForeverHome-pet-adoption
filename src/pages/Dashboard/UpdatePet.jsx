@@ -46,7 +46,7 @@ const AddPet = () => {
       const petData = {
         ...data,
         category: data.category.value,
-        updatedDate: new Date().toLocaleString(),
+        updatedDate: new Date().toISOString(),
         image: imageUrl
       };
       const response = await axiosSecure.patch(`/pets/${prevPet._id}`, petData);

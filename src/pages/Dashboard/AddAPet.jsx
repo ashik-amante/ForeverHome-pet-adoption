@@ -42,7 +42,7 @@ const AddPet = () => {
       longDescription: data.longDescription,
       category: data.category.value,
       image: imageUrl,
-      addedDate: new Date().toLocaleString(),
+      addedDate: new Date(),
       adopted: false,
       email: user?.email
     };

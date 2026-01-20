@@ -13,7 +13,7 @@ import useAxiosSecure from '@/hooks/useAxiosSecure';
 
 const AdminDashboard = () => {
   const axiosSecure = useAxiosSecure();
-  const {data: statistics = [], isLoading} = useQuery({
+  const {data: statistics = [],} = useQuery({
     queryKey: ['statistics'],
     queryFn: async () => {
       const res = await axiosSecure.get('/admin/stats');
@@ -28,14 +28,14 @@ const AdminDashboard = () => {
     { id: 4, title: "Donations", value: statistics?.totalDonation?.[0]?.totalDonationAmmount, icon: DollarSign, color: "text-amber-500", bg: "bg-amber-500/10", trend: "+24%" },
   ];
 
-  const chartData = [
-    { name: 'Jan', donations: 4000, adoptions: 2400 },
-    { name: 'Feb', donations: 3000, adoptions: 1398 },
-    { name: 'Mar', donations: 5000, adoptions: 3800 },
-    { name: 'Apr', donations: 2780, adoptions: 3908 },
-    { name: 'May', donations: 6890, adoptions: 4800 },
-    { name: 'Jun', donations: 5390, adoptions: 3800 },
-  ];
+ const {data : chartData = []} = useQuery({
+    queryKey: ['chartData'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/admin/chartData');
+      return res.data
+    }
+  })
+  console.log(chartData);
 
   const COLORS = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b'];
 
