@@ -156,6 +156,9 @@ const AllPets = () => {
             <p className="text-sm text-slate-500 font-medium">Admin control panel for managing all pet listings across the site.</p>
           </div>
         </div>
+        <div>
+           <span className='px-5 py-2 text-rose-500 bg-rose-50 border border-rose-100 rounded-3xl font-semibold'>Total: {pets.length}</span>
+        </div>
       </div>
 
       <div className="overflow-x-auto">

@@ -24,6 +24,7 @@ import PrivateRoute from "./PrivateRoute";
 import AllPets from "@/pages/Dashboard/AllPets";
 import AllDonations from "@/pages/Dashboard/AllDonations";
 import AdminRoute from "./AdminRoute";
+import AdminStat from "@/pages/Dashboard/AdminStat";
 
 
 
@@ -137,7 +138,11 @@ const router = createBrowserRouter([
       {
         path: 'all-donations',
         element: <AdminRoute><AllDonations/></AdminRoute>
-      }
+      },
+      {
+        path: 'statistics',
+        element: <AdminRoute><AdminStat/></AdminRoute>
+      },
     ]
   }
 ]);

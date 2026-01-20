@@ -3,7 +3,7 @@ import {
   PlusCircle, PawPrint, ClipboardList,
   HandCoins, LayoutDashboard, History, Heart,
   DollarSign,
-  Dog
+  Dog, ChartColumnIncreasing
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,6 +33,7 @@ const userMenuItems = [
 const adminMenuItems = [
   { title: "All Pets", url: "/dashboard/all-pets", icon: Dog },
   { title: "All Donations", url: "/dashboard/all-donations", icon: DollarSign },
+  { title: "Admin Statistics", url: "/dashboard/statistics", icon: ChartColumnIncreasing },
 ]
 
 export function AppSidebar() {
@@ -52,7 +53,7 @@ export function AppSidebar() {
       <SidebarContent>
         {/* user dashboard */}
         <SidebarGroup>
-          <SidebarGroupLabel>User Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel className={'font-bold text-2xl'}>User Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {userMenuItems.map((item) => (
@@ -78,7 +79,7 @@ export function AppSidebar() {
         {
           role === 'admin' && (
             <SidebarGroup>
-              <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
+              <SidebarGroupLabel className={'font-bold text-2xl'}>Admin Dashboard</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {adminMenuItems.map((item) => (
