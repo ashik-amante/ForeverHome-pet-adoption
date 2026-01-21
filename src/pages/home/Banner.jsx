@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart } from "lucide-react";
 import pet from "../../assets/banner.jpg";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
     return (
@@ -20,11 +21,11 @@ const Banner = () => {
                         </p>
                         <div className="flex flex-col gap-2 min-[400px]:flex-row">
                             <Button size="lg" className="px-8">
-                                Adopt Now
+                                <Link to='/pet-listing'>Adopt Now</Link>
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                             <Button variant="outline" size="lg">
-                                View Campaigns
+                                <Link to='/donation'>View Campaigns</Link>
                             </Button>
                         </div>
                     </div>

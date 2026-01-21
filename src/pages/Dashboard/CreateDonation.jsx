@@ -18,7 +18,7 @@ const categoryOptions = [
   { value: 'bird', label: 'Bird' }
 ];
 
-const CreateDonation = () => {
+const CreateDonationCampaign = () => {
   const [loading, setLoading] = useState(false)
   const { user } = useAuth()
   const axiosSecure = useAxiosSecure()
@@ -189,4 +189,4 @@ const CreateDonation = () => {
   )
 }
 
-export default CreateDonation
+export default CreateDonationCampaign

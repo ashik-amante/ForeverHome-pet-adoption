@@ -28,6 +28,7 @@ const userMenuItems = [
   { title: "My Campaigns", url: "/dashboard/my-campaigns", icon: LayoutDashboard },
   { title: "My Donations", url: "/dashboard/my-donations", icon: History },
   { title: "My adopted pets", url: "/dashboard/my-adopted", icon: History },
+  { title: "User Statistics", url: "/dashboard/user-stats", icon: ChartColumnIncreasing },
  
 ];
 

@@ -26,61 +26,63 @@ import AllDonations from "@/pages/Dashboard/AllDonations";
 import AdminRoute from "./AdminRoute";
 import AdminStat from "@/pages/Dashboard/AdminStat";
 import MyAdopted from "@/pages/Dashboard/MyAdopted";
+import UserStats from "@/pages/Dashboard/UserStats";
+import CreateDonationCampaign from "@/pages/Dashboard/CreateDonation";
 
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component:RootLayout,
-    errorElement: <ErrorPage/>,
+    Component: RootLayout,
+    errorElement: <ErrorPage />,
     children: [
-        {
-            path:"/",
-            element:<Home/>
-        },
-        {
-          path: "/pet-listing",
-          element: <PetListing/>
-        },
-        {
-          path: "/pet-details/:id",
-          element: <PetDetails/>,
-          loader: async ({params}) => {
-            const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
-            return res.data
-          }
-        },
-        {
-          path: '/donation',
-          element: <DonationCampaigns/>
-        },
-        {
-          path: '/donationDetails/:id',
-          element: <DonationDetails/>,
-          loader: async ({params}) => {
-            const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
-            return res.data
-          }
-        },
-        {
-          path: '/forbidden',
-          element: <Forbidden/>
+      {
+        path: "/",
+        element: <Home />
+      },
+      {
+        path: "/pet-listing",
+        element: <PetListing />
+      },
+      {
+        path: "/pet-details/:id",
+        element: <PetDetails />,
+        loader: async ({ params }) => {
+          const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
+          return res.data
         }
+      },
+      {
+        path: '/donation',
+        element: <DonationCampaigns />
+      },
+      {
+        path: '/donationDetails/:id',
+        element: <DonationDetails />,
+        loader: async ({ params }) => {
+          const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
+          return res.data
+        }
+      },
+      {
+        path: '/forbidden',
+        element: <Forbidden />
+      }
     ]
   },
   // authentication routes
   {
     path: '/',
-    element: <AuthenticationLayout/>,
+    element: <AuthenticationLayout />,
     children: [
       {
         path: '/login',
-        element: <Login/>
+        element: <Login />
       },
       {
         path: '/register',
-        element: <Register/>
+        element: <Register />
       }
     ]
   },
@@ -88,65 +90,69 @@ const router = createBrowserRouter([
   // dashboard routes
   {
     path: '/dashboard',
-    element: <PrivateRoute><DashboardLayout/></PrivateRoute>,
+    element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
     children: [
       {
         path: 'add-pet',
-        element: <AddAPet/>
+        element: <AddAPet />
       },
       {
         path: 'my-pets',
-        element: <MyAdded/>
+        element: <MyAdded />
       },
-   
+
       {
         path: 'adoption-requests',
-        element: <AdoptionRequest/>
+        element: <AdoptionRequest />
       },
       {
         path: 'create-donation',
-        element: <CreateDonation/>
+        element: <CreateDonationCampaign />
       },
       {
         path: 'my-campaigns',
-        element: <MyCampaign/>
+        element: <MyCampaign />
       },
       {
         path: 'my-donations',
-        element: <MyDonation/>
+        element: <MyDonation />
       },
       {
         path: 'update-pet/:id',
-        element: <UpdatePet/>,
-        loader: async ({params})=>{
+        element: <UpdatePet />,
+        loader: async ({ params }) => {
           const res = await axios.get(`http://localhost:5000/petDetails/${params.id}`)
           return res.data
         }
       },
       {
         path: 'edit-donation/:id',
-        element: <EditDonation/>,
-        loader: async ({params})=>{
+        element: <EditDonation />,
+        loader: async ({ params }) => {
           const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
           return res.data
         },
       },
-       {
-          path: 'my-adopted',
-          element: <MyAdopted/>
-        },
+      {
+        path: 'my-adopted',
+        element: <MyAdopted />
+      },
+      {
+        path: 'user-stats',
+        element: <UserStats/>
+      },
       // Admin routes
       {
         path: 'all-pets',
-        element: <AdminRoute><AllPets/></AdminRoute>
+        element: <AdminRoute><AllPets /></AdminRoute>
       },
       {
         path: 'all-donations',
-        element: <AdminRoute><AllDonations/></AdminRoute>
+        element: <AdminRoute><AllDonations /></AdminRoute>
       },
       {
         path: 'statistics',
-        element: <AdminRoute><AdminStat/></AdminRoute>
+        element: <AdminRoute><AdminStat /></AdminRoute>
       },
     ]
   }

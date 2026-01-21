@@ -23,12 +23,13 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useAuth from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import Loading from '@/components/Loading';
 
 const MyAdded = () => {
   const axiosSecure = useAxiosSecure();
   const {user} = useAuth()
   
-  const {data: myAdded =[],refetch} = useQuery({
+  const {data: myAdded =[],refetch,isLoading} = useQuery({
     queryKey: ['myAdded',user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -135,6 +136,7 @@ const MyAdded = () => {
     initialState: { pagination: { pageSize: 5 } },
   });
 
+  if(isLoading) return <Loading/>
   return (
     <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 shadow-sm
      overflow-hidden">

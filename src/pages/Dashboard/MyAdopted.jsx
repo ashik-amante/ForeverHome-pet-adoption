@@ -72,7 +72,7 @@ const MyAdopted = () => {
       header: 'Adoption Status',
       cell: ({ getValue }) => (
         <span className={`px-3 py-1 rounded-full text-xs font-bold ${getValue() === "accepted" ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
-          {getValue() === "accepted" ? 'Adopted' : 'Not Adopted'}
+          {getValue() === "accepted" ? 'Adopted' : 'Not Accepted'}
         </span>
       ),
     },
@@ -93,7 +93,7 @@ const MyAdopted = () => {
      overflow-hidden">
       <div className="p-6 md:p-8 border-b border-slate-50 flex justify-between items-center bg-linear-to-r from-rose-50 to-transparent">
         <div>
-          <h2 className="text-3xl font-extrabold text-slate-800 dark:text-white">My Adopted Pets</h2>
+          <h2 className="text-3xl font-extrabold text-slate-800 dark:text-white">My Adopted Pets + Requested Pets</h2>
           <p className="text-sm text-slate-500 mt-1 font-medium">Manage and track your listed pets effortlessly.</p>
         </div>
         <span className="text-sm font-bold text-rose-500 bg-rose-50 px-5 py-2 rounded-2xl border border-rose-100">

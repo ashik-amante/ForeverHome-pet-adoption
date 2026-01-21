@@ -3,11 +3,12 @@ import { ArrowRight, DollarSign, Pause } from "lucide-react";
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import Loading from '@/components/Loading';
 
 const DonationCampaigns = () => {
   const axiosSecure = useAxiosSecure()
 
-  const { data: donations = [] } = useQuery({
+  const { data: donations = [],isLoading } = useQuery({
     queryKey: ['donations'],
     queryFn: async () => {
       const res = await axiosSecure.get('/donationCampaigns')
@@ -15,6 +16,8 @@ const DonationCampaigns = () => {
     }
   })
   console.log(donations);
+
+  if(isLoading) return <Loading/>
 
   return (
     <div className="container mx-auto px-4 py-12 ">

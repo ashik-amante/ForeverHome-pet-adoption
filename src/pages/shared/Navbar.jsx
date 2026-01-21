@@ -82,7 +82,7 @@ const Navbar = () => {
 
                             <DropdownMenuContent className="w-40 mt-3">
                                 <DropdownMenuItem asChild>
-                                    <Link to="/dashboard/my-pets">Dashboard</Link>
+                                    <Link to="/dashboard/user-stats">Dashboard</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={handleLogout}
@@ -126,7 +126,7 @@ const Navbar = () => {
                             <Link to='/login' className='block py-2'>Login</Link>
                         ) : (
                             <>
-                                <Link to='/dashboard' className='block py-2'>Dashboard</Link>
+                                <Link to='/dashboard/user-stats' className='block py-2'>Dashboard</Link>
                                 <button
                                     onClick={handleLogout}
                                     className='block py-2 text-red-600 w-full text-left'
