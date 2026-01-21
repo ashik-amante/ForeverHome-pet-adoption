@@ -97,7 +97,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h3 className="text-xl font-black text-slate-900">Performance Flow</h3>
-              <p className="text-sm text-slate-400 font-medium">Monthly <span className='text-rose-500'>Adoption</span> vs <span className='text-purple-500'>Donations</span></p>
+              <p className="text-sm text-slate-400 font-medium">Monthly <span className='text-purple-500'>Adoption</span> vs <span className='text-rose-500'>Donations</span></p>
             </div>
             <select className="bg-slate-50 border-none rounded-xl text-xs font-bold px-4 py-2 outline-none">
               <option>Last 6 Months</option>

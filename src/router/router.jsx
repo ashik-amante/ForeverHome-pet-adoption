@@ -25,6 +25,7 @@ import AllPets from "@/pages/Dashboard/AllPets";
 import AllDonations from "@/pages/Dashboard/AllDonations";
 import AdminRoute from "./AdminRoute";
 import AdminStat from "@/pages/Dashboard/AdminStat";
+import MyAdopted from "@/pages/Dashboard/MyAdopted";
 
 
 
@@ -128,8 +129,12 @@ const router = createBrowserRouter([
         loader: async ({params})=>{
           const res = await axios.get(`http://localhost:5000/donationCampaignsDetails/${params.id}`)
           return res.data
-        }
+        },
       },
+       {
+          path: 'my-adopted',
+          element: <MyAdopted/>
+        },
       // Admin routes
       {
         path: 'all-pets',

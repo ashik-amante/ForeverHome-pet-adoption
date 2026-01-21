@@ -27,6 +27,7 @@ const userMenuItems = [
   { title: "Create Donation Campaign", url: "/dashboard/create-donation", icon: HandCoins },
   { title: "My Campaigns", url: "/dashboard/my-campaigns", icon: LayoutDashboard },
   { title: "My Donations", url: "/dashboard/my-donations", icon: History },
+  { title: "My adopted pets", url: "/dashboard/my-adopted", icon: History },
  
 ];
 
